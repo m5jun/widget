@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title></title>
+    <style type="text/css">
+        body{
+            background-color: #000;
+        }
+        .describe{
+            position: absolute;
+            width: 200px;
+            top:200px;
+            left: 100px;
+            color: #fff;
+            line-height: 25px;
+        }
+        .content{
+            width: 550px;
+            position: absolute;
+            left: 500px;
+            top: 200px;
+            color: #616161;
+        }
+        p{
+            text-indent: 2em;
+            padding: 3px;
+        }
+        .head{
+            float: left;
+        }
+        .ht-container{
+            width: 400px;
+            color: white;
+            font-size: 14px;
+            text-align: center;
+        }
+        .ht-tipInfo{
+            background-color: #c00;
+            padding: 10px;
+        }
+        .hg-myContainer{
+            width: 500px;
+            background-color: #c00;
+            font-size: 14px;
+            padding: 10px;
+            color: #fff;
+        }
+        .hg-myTipInfo{
+            text-align: center;
+            padding: 5px;
+        }
+        .own{
+            width: 500px;
+            height: 380px;
+            background: url(./img/jiehun.jpg) no-repeat;
+        }
+        .ht-myArrow{
+            display: inline-block;
+            position: absolute;
+            left: 250px;
+            top: 426px;
+            width: 0;
+            height: 0;
+            border-width: 5px;
+            border-style: solid dashed dashed;
+            *overflow: hidden;
+            border-color: #cc0000 transparent transparent transparent;
+        }
+        .ht-tipArrow{
+            margin-left: auto;
+            margin-right: auto;
+            width: 0;
+            height: 0;
+            border-width: 5px;
+            border-style: solid dashed dashed;
+            *overflow: hidden;
+            border-color: #cc0000 transparent transparent transparent;
+        }
+    </style>
+    <script src="../../product/project/index/demo/common/js/tangram-min.js" type="text/javascript"></script>
+</head>
+<body>
+    <div class="describe">
+        我们主站页面上有很多地方用到这种类似的信息提示框,写了个插件，如果感兴趣可以参考，比较简单；
+        看效果，将鼠标放到链接的文字上面就可以了,兼容所有浏览器。
+    </div>
+    <div class="content">
+        <img id="J_head" class="head" src="./img/girl.jpg" title="我是你们的宅男女神,想使用提示信息框插件，请看infoTipTest.html中的说明吧...">
+        <p> 高圆圆，中国内地一线女演员。出生于北京市丰台区一个普通的知识分子家庭。</p>
+        <p>
+            1996年，还在上高中的她，
+            在王府井逛街时被广告公司发掘，拍摄了自己的第一条广告。随后的几年间，她拍摄了大量的广告，成为了广告圈中的知名模特儿。
+        </p>
+        <p>
+            <a href="###" id="J_photo" title="更多我的更多我的照片请到上百度搜索吧..."
+               class="hover-content">我有很多照片</a>
+        1997年，高圆圆出演了她的第一部电影，从此开始了她的演员生涯。2000年9月，悉尼奥运会期间频频在电视上播出的清嘴含片广告让她为大家所熟知，
+        人们一度称她为“清嘴女孩”。
+        </p>
+        <p>
+            影视包括：《倚天屠龙记》、
+            <a id="J_movie" title="这部电视剧正在热播，赶紧看吧..." href="###" class="hover-content">《咱们结婚吧》</a>、《搜索》、《南京！南京！》等。
+        </p>
+    </div>
+</body>
+<script>
+    baidu(function(){
+
+        function InfoTipFactory(){}
+        InfoTipFactory.prototype.initAttributes = function(tip){
+            //需要hover提示的对象,就是鼠标放上去的对象
+            this._current = baidu("#"+tip._id);
+            //提示框容器的类，用来控制样式
+            this._classContainer = (tip._classContainer === undefined) ? 'ht-container':tip._classContainer;
+            //提示信息的div的类，用来控制样式
+            this._classTipInfo = (tip._classTipInfo === undefined) ? 'ht-tipInfo':tip._classTipInfo;
+            //提示信息的箭头
+            this._classArrow = (tip._classArrow === undefined) ? 'ht-tipArrow':tip._classArrow;
+            //是否响应mouseenter事件
+            this._isFired = (tip._isFired === undefined) ? true : false;
+            //显示提示信息的对话框的容器id
+            this._idContainer = "HT_"+tip._id;
+            //在提示框上显示的信息，需要给标签设定title属性
+            this._info = this._current.attr("title");
+            //箭头离文字的上下距离，默认是10px，根据需要增大
+            this._away = (tip._away === undefined)? 10: tip._away;
+            //在提示框中放提示信息的div标签的id
+            this._idTipInfo = "HT_content_"+tip._id;
+            //提示框整体的div结构
+            this._frameTip='<div id="'+this._idContainer+'" class="'+this._classContainer+'">' +
+                    '<div class="'+this._classTipInfo+'" id="'+this._idTipInfo+'"></div>' +
+                    '<div class="'+this._classArrow+'"></div>' +
+                    '</div>';
+            this._frameTemp ='<div id="'+this._idContainer+'" class="'+this._classContainer+'">' +tip._customContent+
+                    '<div class="'+this._classTipInfo+'" id="'+this._idTipInfo+'"></div>' +
+                    '<div class="'+this._classArrow+'"></div>' +
+                    '</div>';
+            //自定义的显示其他内容的div结构，如图片等
+            this._frameTip = (tip._customContent === undefined) ? this._frameTip: this._frameTemp;
+            }
+        InfoTipFactory.prototype.renderLayout = function (){
+            baidu('body').append(this._frameTip);
+            this._tipInfo = baidu('#'+this._idTipInfo);
+            this._tipInfo.html(this._info);
+            this._current.attr('title','');
+            this._container = baidu("#"+this._idContainer);
+            //计算提示框的位置
+            var yOffset = this._container.height() + this._away;
+            var xOffset = (this._container.width() / 2) - (this._current.width() / 2);
+            var pos = this._current.offset();
+            var newPos = pos;
+            newPos.top = pos.top - yOffset;
+            newPos.left = pos.left - xOffset;
+            this._container.css('position', 'absolute').css('z-index', '9999');
+            this._container.css(newPos);
+        }
+        InfoTipFactory.prototype.eventHandle =function(){
+            var _this = this;
+            this._current.mouseenter(function(){
+                _this.renderLayout();
+            });
+            this._current.mouseleave(function(){
+                _this.disposeLayout();
+            });
+        }
+        InfoTipFactory.prototype.disposeLayout = function (){
+            this._container.remove();
+            this._current.attr('title',this._info);
+        }
+        InfoTipFactory.prototype.createTipDialog =function(tip){
+            this.initAttributes(tip);
+            if(this._isFired == true){
+                this.eventHandle();
+            }else{
+                this.renderLayout();
+            }
+        }
+
+        //注意： 在使用对象之前需要传递一个配置对象进去,为了可扩展性，配置信息见下面：
+        //必须要给标签设定一个title属性，用title来装提示文字信息；
+        // 原因是：一般后端直接将数据打到前端，考虑到提示框的内容的多变，用title属性来接收要显示的值；
+        // 调试样式的话，最好将_isFired设为false,使它禁止响应鼠标事件，能发好地进行调试样式；
+
+        //配置信息解释：
+        //_id:必须要传,  当前对象的id，就是需要给谁做 hover提示框效果的对象;
+        //_classContainer: 可选参数，给提示信息框的容器设定一个类，来控制其样式，如果不给值默认会给一个值：ht-container
+        //_classTipInfo: 可选参数，在提示框中提示信息的class,不给值，默认值是:ht-tipInfo
+        //_classArrow; 可选参数，自定义提示箭头的类：默认是: ht-arrow
+        //_customContent; 可选参数，自定义提示框中的其他内容的标签结构，默认是没有值的。
+        //_away:  可选参数，箭头离文字的上下距离，默认是10px
+        //_isFired: 可选参数，是否影响mousenter事件
+
+        // 提示信息框的结构为：'<div id="'+this._idContainer+'" class="'+this._classContainer+'">+
+        // tip._customContent+  这一层div是自定义要存放的内容,可根据情况自己随意定义;
+        //'<div class="'+this._classTipInfo+'" id="'+this._idTipInfo+'"></div>'+ 这一层是要存放提示信息的,即title里的内容;
+        // '<div class="'+this._classArrow+'"></div>'+  这一层是用来存放箭头的;
+       // '</div>';
+
+        var tip = {
+            _id: 'J_head',
+            _isFired: false,
+            _away: 5
+        };
+        var tip1 = {
+            _id: 'J_photo',
+            _away: 5
+        };
+        var own ='<div class="own"></div>';
+        var tip2 = {
+            _id: 'J_movie',
+            _classContainer: 'hg-myContainer',
+            _classTipInfo: 'hg-myTipInfo',
+            _classArrow: 'ht-myArrow',
+            _customContent: own,
+            _away: 30
+        };
+        new InfoTipFactory().createTipDialog(tip);
+        new InfoTipFactory().createTipDialog(tip1);
+        new InfoTipFactory().createTipDialog(tip2);
+    });
+</script>
+</html>
