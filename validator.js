@@ -1,19 +1,18 @@
 /**
- * @file   验证器，主要用来验证表单的提交，即一次性验证多个字段，或单个想校验的字段，例如邮箱
+ * @file   验证器组件，可以用来验证一些平时我们在项目中经常使用的字段和表单验证提交等
  * @example
  *      1. 用法例子如下：
- *          引用文件: var validator = require('order:widget/ui/validator/validator.js');
- *          获取一个单例: var single = validator.getInstance();
+ *          获取一个单例: var single = v.getInstance();
  *          验证邮箱： var data = {email: '这里是你的邮箱值'}；
  *          执行结果: var result = single.validate(data),result为true,数据验证没有问题，false数据不合法;
  *          可以输出错误提示：console.log(single.messages);
  *          表单提交的时候一次性多次验证：
- *          var data = {email: '你的邮箱',phone: '你的号码值',empty: '要传的值'},如果返回结果为true，才会提交,
+ *          var data = {email: '你的邮箱',phone: '你的手机号码',empty: '要传的值'},如果返回结果为true，才会提交,
  *          可以输出错误提示：console.log(single.messages)进行调示
  *      2. 本验证器易扩展：
- *          1). 比如我难证的某个字段，插件里没有提供，我的代码逻辑要验证某个对象是不是个美女,请按下面规则添加
+ *          1). 比如我难证的某个字段，插件里没有提供，我的代码逻辑要验证某个对象是不是美女,请按下面规则添加
  *
- *              a). 获取单例对象：var single = validator.getInstance();
+ *              a). 获取单例对象：var single = v.getInstance();
  *              b). single.configs ={girl: 'isBeautifulGirl'}
                 c). single.handlers.isBeautifulGirl = {
                         validate: function(value){
@@ -29,14 +28,12 @@
                     single.configs.handlers.phone.validate = function(){........}
  *      3. 后面还可以添加其他验证逻辑,只需根据例子添加，不用修改太多的代码
  *
- * @exports
- *        getInstance()
- * @author xiongjun
+ * @author tuanfe
  * @since  2014/03/26
  */
 
 
-module.exports = (function () {
+var v = (function () {
 
     var unique;
 
