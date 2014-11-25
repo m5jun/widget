@@ -1,6 +1,6 @@
 /**
  * @file 弹出对话框组件
- * @author xiongjun(xiongjun@baidu.com)
+ * @author xiongjun
  * @date 2014/5/19
  */
 
